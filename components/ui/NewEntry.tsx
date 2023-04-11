@@ -1,50 +1,78 @@
 import { Box, Button, TextField } from "@mui/material";
-import React from "react";
+import React, { ChangeEvent, useContext, useState } from "react";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import ControlPointOutlinedIcon from '@mui/icons-material/ControlPointOutlined';
+import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
+import { EntriesContext } from "../../context/entries";
 
 export const NewEntry = () => {
-  return (
-    <Box sx={{ marginBottom: 2, padding: 2  }}>
+  const [isAdding, setIsAdding] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [touched, setTouched] = useState(false);
 
-       
-       <Button
-        startIcon={ < ControlPointOutlinedIcon /> } 
-        fullWidth
-        variant="outlined"
+  const { addNewEntry } = useContext(EntriesContext)
 
-       >
-         Agregar tarea
-       </Button>
+  const valueInput = ( event: ChangeEvent<HTMLInputElement  > ) => {
+     setInputValue( event.target.value );
+  }
 
+  const onSave =  () => {
 
-       <TextField
-          fullWidth
-          sx={{ marginTop: 2, marginBottom: 1 }} 
-          placeholder='nueva entrada'
-          autoFocus
-          multiline
-          label='nueva entrada'
-          helperText='ingrese un guevo'
-       />
+      if ( inputValue.length === 0 ) return; 
 
-      <Box display='flex' justifyContent='space-between'>
-        <Button
-          variant="outlined"
-          color="secondary"
-          endIcon={<SaveOutlinedIcon />}
-        >
-          Guardar
-        </Button>
-
-        <Button
-          variant="text"
+      addNewEntry(inputValue);
+      setIsAdding( false );
+      setTouched( false );
+      setInputValue("");
         
-        >
-          cancelar
-        </Button>
+      
+  }
+   
+  return (
+    <Box sx={{ marginBottom: 2, padding: 2 }}>
+      {isAdding ? (
+        <>
+          <TextField
+            fullWidth
+            sx={{ marginTop: 2, marginBottom: 1 }}
+            placeholder="nueva entrada"
+            autoFocus
+            multiline
+            label="nueva entrada"
+            helperText={ inputValue.length <= 0 && touched && 'ingrese un valor' }
+            error={ inputValue.length <= 0 && touched }
+            value={inputValue}
+            onChange={ valueInput  }
+            onBlur={ () => setTouched (true) }
+          />
 
-      </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Button
+              variant="outlined"
+              color="secondary"
+              endIcon={<SaveOutlinedIcon />}
+              onClick={ onSave }
+            >
+              Guardar
+            </Button>
+
+            <Button
+             variant="text"
+             onClick={ () => setIsAdding(false) }
+             >
+              cancelar
+            </Button>
+          </Box>
+        </>
+      ) : (
+        <Button
+          startIcon={<ControlPointOutlinedIcon />}
+          fullWidth
+          variant="outlined"
+          onClick={ () => setIsAdding(true) }
+        >
+          Agregar tarea
+        </Button>
+      )}
     </Box>
   );
 };
