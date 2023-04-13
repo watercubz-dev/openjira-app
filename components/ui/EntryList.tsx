@@ -13,7 +13,7 @@ export const EntryList:FC<Props> = ({ status }) => {
 
    const { isDragging } = useContext( UIContext )
 
-   const { entries, updateEntry, addNewEntry } = useContext( EntriesContext );
+   const { entries, updateEntry } = useContext( EntriesContext );
 
    const entriesByStatus = useMemo( () =>  entries.filter( entry => entry.status === status ), [ entries ] );
 
@@ -30,9 +30,7 @@ export const EntryList:FC<Props> = ({ status }) => {
         updateEntry( entry );
         
    }
-   const addNewEntryProps = () => {
-      
-   }
+
   return (
     <div
       onDrop={ onDropEntry }
