@@ -11,8 +11,8 @@ import { lightTheme, darkTheme } from "../../themes";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <EntrisState entries={[]}>
-    <UIProvider sidemenuOpen={false} >
-    <ThemeProvider theme={ darkTheme }>
+    <UIProvider sidemenuOpen={false} isAddingEntry={false} isDragging={false} >
+    <ThemeProvider theme={ lightTheme }>
       <CssBaseline />
       <Component {...pageProps} />
     </ThemeProvider>
